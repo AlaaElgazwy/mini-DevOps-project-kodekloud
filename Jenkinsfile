@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 
-                git branch: 'main', url: 'https://git@github.com:AlaaElgazwy/mini-DevOps-project-kodekloud.git'
+                git branch: 'main', url: 'git@github.com:AlaaElgazwy/mini-DevOps-project-kodekloud.git'
             }
         }
 
