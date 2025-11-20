@@ -1,26 +1,30 @@
 pipeline {
+    /
     agent any 
+
     environment {
         
-        DOCKER_IMAGE = "alaaelgazwy/django-app" 
+        DOCKER_IMAGE_REPO = "alaaelgazwy/django-app" 
         DOCKER_CREDENTIALS_ID = "dockerhub" 
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                
-                git branch: 'main', url: 'https://github.com/AlaaElgazwy/mini-DevOps-project-kodekloud.git'
-            }
-        }
-
+        
         stage('Build Docker Image') {
             steps {
                 script {
                     
                     def customTag = "${env.BUILD_NUMBER}"
+                    echo "Building image ${DOCKER_IMAGE_REPO}:${customTag}"
                     
-                    docker.build("${DOCKER_IMAGE}:${customTag}", '.')
+                
+                    def builtImage = docker.build("${DOCKER_IMAGE_REPO}:${customTag}", ".")
+                    
+                    
+                    builtImage.tag("latest") 
+                    
+                    
+                    env.BUILT_IMAGE_TAG = builtImage.id
                 }
             }
         }
@@ -28,15 +32,27 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-            
+                    
                     withDockerRegistry(credentialsId: "${DOCKER_CREDENTIALS_ID}", url: 'https://registry.hub.docker.com') {
-                        def image = docker.image("${DOCKER_IMAGE}")
                         
-                        image.push("${env.BUILD_NUMBER}")
+                        def imageToPush = docker.image("${DOCKER_IMAGE_REPO}")
                         
-                        image.push("latest")
+                        
+                        imageToPush.push("${env.BUILD_NUMBER}")
+                        
+                        
+                        imageToPush.push("latest")
                     }
                 }
+            }
+        }
+        
+        stage('Clean Up') {
+            steps {
+                echo "Cleaning up local images on the agent..."
+                
+                sh "docker rmi -f ${DOCKER_IMAGE_REPO}:${env.BUILD_NUMBER}"
+                sh "docker rmi -f ${DOCKER_IMAGE_REPO}:latest"
             }
         }
     }
