@@ -14,6 +14,10 @@ pipeline {
             steps {
                 script {
                     
+                    sh "apt-get update"
+                
+                    sh "apt-get install -y docker.io"
+
                     def customTag = "${env.BUILD_NUMBER}"
                     echo "Building image ${DOCKER_IMAGE_REPO}:${customTag}"
 
