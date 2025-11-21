@@ -10,6 +10,12 @@ pipeline {
 
     stages {
         
+        stage('Checkout Code') {
+            steps {
+                
+                git branch: 'main', url: 'https://github.com/AlaaElgazwy/mini-DevOps-project-kodekloud.git'
+            }
+        }
         
         stage('Build Docker Image') {
             steps {
