@@ -1,12 +1,6 @@
 pipeline {
     
-    agent {
-        node{
-            label 'jenkins' 
-            customWorkspace "${env.WORKSPACE}"
-            user 'root'
-        }
-    }
+    agent any
 
     environment {
         
@@ -20,20 +14,22 @@ pipeline {
             steps {
                 script {
 
-                    sh " apt-get update"
-                
-                    sh "  apt-get install -y docker.io"
+                    
 
                     def customTag = "${env.BUILD_NUMBER}"
                     echo "Building image ${DOCKER_IMAGE_REPO}:${customTag}"
 
-                
-                    sh "docker build -t ${DOCKER_IMAGE_REPO}:${customTag} ."
-
-                
-                   sh "docker tag ${DOCKER_IMAGE_REPO}:${customTag} ${DOCKER_IMAGE_REPO}:latest"
-
-                   env.BUILT_IMAGE_TAG = "${DOCKER_IMAGE_REPO}:${customTag}" 
+                   sh '''
+            
+                        apt-get update
+                        apt-get install -y docker.io 
+                        
+                         
+                        docker build -t ${DOCKER_IMAGE_REPO}:${customTag} .
+                        docker tag ${DOCKER_IMAGE_REPO}:${customTag} ${DOCKER_IMAGE_REPO}:latest
+                    '''
+                    
+                    env.BUILT_IMAGE_TAG = "${DOCKER_IMAGE_REPO}:${customTag}"
                 }
             }
         }
