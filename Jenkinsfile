@@ -42,7 +42,7 @@ pipeline {
                     }
                 }
             }
-        }
+        
         
         stage('Clean Up') {
             steps {
@@ -51,5 +51,8 @@ pipeline {
                 sh "docker rmi -f ${DOCKER_IMAGE_REPO}:${env.BUILD_NUMBER}"
                 sh "docker rmi -f ${DOCKER_IMAGE_REPO}:latest"
             }
+        
         }
-    }
+        } 
+
+}
