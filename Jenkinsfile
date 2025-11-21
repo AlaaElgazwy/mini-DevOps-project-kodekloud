@@ -2,7 +2,7 @@ pipeline {
     agent any 
     environment {
         
-        DOCKER_IMAGE = "alaaelgazwy/django-app"
+        DOCKER_IMAGE_REPO = "alaaelgazwy/django-app"
         DOCKER_CREDENTIALS_ID = "dockerhub" 
     }
 
