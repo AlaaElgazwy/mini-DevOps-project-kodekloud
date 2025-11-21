@@ -21,7 +21,7 @@ pipeline {
                     def customTag = "${env.BUILD_NUMBER}"
                     echo "Building image ${DOCKER_IMAGE_REPO}:${customTag}"
 
-                   sh '''
+                   sh """
             
                         apt-get update
                         apt-get install -y docker.io 
@@ -29,7 +29,7 @@ pipeline {
                          
                         docker build -t ${DOCKER_IMAGE_REPO}:${customTag} .
                         docker tag ${DOCKER_IMAGE_REPO}:${customTag} ${DOCKER_IMAGE_REPO}:latest
-                    '''
+                    """
                     
                     env.BUILT_IMAGE_TAG = "${DOCKER_IMAGE_REPO}:${customTag}"
                 }
