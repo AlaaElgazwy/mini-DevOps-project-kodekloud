@@ -4,6 +4,7 @@ pipeline {
         
         DOCKER_IMAGE_REPO = "alaaelgazwy/django-app"
         DOCKER_CREDENTIALS_ID = "dockerhub" 
+        RENDER_HOOK_URL = credentials('render-deploy-hook')
     }
 
     stages {
@@ -49,5 +50,14 @@ pipeline {
                     }
                 }
             }
+        stage('Deploy to Render') {
+            steps {
+                script {
+                    echo "Triggering deployment on Render..."
+                   
+                    sh "curl -X POST ${RENDER_HOOK_URL}"
+                }
+            }
+        } 
         }
     }
