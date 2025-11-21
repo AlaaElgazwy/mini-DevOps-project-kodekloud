@@ -16,15 +16,14 @@ pipeline {
                     
                     def customTag = "${env.BUILD_NUMBER}"
                     echo "Building image ${DOCKER_IMAGE_REPO}:${customTag}"
-                    
+
                 
-                    def builtImage = docker.build("${DOCKER_IMAGE_REPO}:${customTag}", ".")
-                    
-                    
-                    builtImage.tag("latest") 
-                    
-                    
-                    env.BUILT_IMAGE_TAG = builtImage.id
+                    sh "docker build -t ${DOCKER_IMAGE_REPO}:${customTag} ."
+
+                
+                   sh "docker tag ${DOCKER_IMAGE_REPO}:${customTag} ${DOCKER_IMAGE_REPO}:latest"
+
+                   env.BUILT_IMAGE_TAG = "${DOCKER_IMAGE_REPO}:${customTag}" 
                 }
             }
         }
@@ -33,15 +32,13 @@ pipeline {
             steps {
                 script {
                     
-                    withDockerRegistry(credentialsId: "${DOCKER_CREDENTIALS_ID}", url: 'https://registry.hub.docker.com') {
-                        
-                        def imageToPush = docker.image("${DOCKER_IMAGE_REPO}")
-                        
-                        
-                        imageToPush.push("${env.BUILD_NUMBER}")
-                        
-                        
-                        imageToPush.push("latest")
+                       withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                }
+
+                
+                   sh "docker push ${DOCKER_IMAGE_REPO}:${env.BUILD_NUMBER}"
+                   sh "docker push ${DOCKER_IMAGE_REPO}:latest"
                     }
                 }
             }
@@ -56,4 +53,3 @@ pipeline {
             }
         }
     }
-}
