@@ -29,16 +29,19 @@ The pipeline is defined in a declarative `Jenkinsfile` and performs the followin
 ## 📸 Screenshots
 
 ### 1. Jenkins Pipeline (Success State)
-*(ضع هنا صورة لصفحة Jenkins وهي خضراء)*
-![Jenkins Pipeline](/home/alaa/Pictures/Screenshots/Screenshot from 2025-11-21 23-49-31.png)
+
+![Jenkins Pipeline](/images/jenkins-pipline.png)
 
 ### 2. Docker Hub Repository
-*(ضع هنا صورة لحسابك على Docker Hub)*
-![Docker Hub](/home/alaa/Pictures/Screenshots/Screenshot from 2025-11-21 20-39-01.png)
+
+![Docker Hub](/images/docker-hub.png)
 
 ### 3. Live Application
-*(ضع هنا صورة للموقع يعمل)*
-![Live App](/home/alaa/Pictures/Screenshots/Screenshot from 2025-11-22 00-28-09.png)
+
+![Live App](/images/django-app.png)
+
+### render 
+![On Render](/images/render.png)
 
 ## 💻 How to Run Locally
 
